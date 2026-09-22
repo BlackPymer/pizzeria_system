@@ -67,3 +67,12 @@ target_link_libraries(run_tests PRIVATE ${UNITTEST_LIB})
 
 target_compile_options(run_tests PRIVATE --coverage)
 target_link_options(run_tests PRIVATE --coverage)
+
+find_program(PYTHON3_EXECUTABLE python3)
+add_custom_target(coverage
+    COMMAND $<TARGET_FILE:run_tests>
+    COMMAND ${PYTHON3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/coverage.py ${CMAKE_BINARY_DIR}
+    DEPENDS run_tests
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    COMMENT "Running tests and printing code coverage"
+)

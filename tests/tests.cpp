@@ -1176,3 +1176,229 @@ SUITE(PizzeriaDepartmentStaff)
         CHECK_EQUAL(6, dept->GetStaffCount());
     }
 }
+
+SUITE(NewFieldCoverage)
+{
+    TEST(Human_PhoneNumber)
+    {
+        Human h(25, "Alice");
+        CHECK_EQUAL("", h.GetPhoneNumber());
+        h.SetPhoneNumber("+7-900-000-00-00");
+        CHECK_EQUAL("+7-900-000-00-00", h.GetPhoneNumber());
+    }
+
+    TEST(PizzeriaWorker_HourlyRate)
+    {
+        PizzeriaWorker w(25, "Ann", 10.5);
+        CHECK_CLOSE(10.5, w.GetHourlyRate(), 0.001);
+        w.SetHourlyRate(12.0);
+        CHECK_CLOSE(12.0, w.GetHourlyRate(), 0.001);
+    }
+
+    TEST(PizzeriaCooker_Fields)
+    {
+        PizzeriaCooker c(30, "Chef");
+        CHECK_EQUAL(0, c.GetOrdersCooked());
+        CHECK(!c.IsBusy());
+        CHECK_EQUAL("pizza_maker", c.GetSpecialty());
+        c.SetSpecialty("pasta_chef");
+        CHECK_EQUAL("pasta_chef", c.GetSpecialty());
+    }
+
+    TEST(PizzeriaCookerIntern_TrainingScore)
+    {
+        PizzeriaCookerIntern i(19, "Pablo", 0.1);
+        CHECK_EQUAL(0, i.GetTrainingScore());
+        i.SetTrainingScore(7);
+        CHECK_EQUAL(7, i.GetTrainingScore());
+    }
+
+    TEST(Accountant_Transactions)
+    {
+        Accountant acc(35, "Grace");
+        CHECK_EQUAL(0, acc.GetTransactionsCount());
+        acc.RecordRevenue(100);
+        acc.RecordExpense(40);
+        CHECK_EQUAL(2, acc.GetTransactionsCount());
+    }
+
+    TEST(Cashier_TransactionsProcessed)
+    {
+        Cashier cashier(28, "Nancy");
+        cashier.OpenShift(0);
+        auto payment = std::make_shared<CashPayment>(500, 1000);
+        cashier.AcceptPayment(payment, 500);
+        CHECK_EQUAL(1, cashier.GetTransactionsProcessed());
+    }
+
+    TEST(Hostess_GuestsSeatedToday)
+    {
+        Hostess h(22, "Emma");
+        CHECK_EQUAL(0, h.GetGuestsSeatedToday());
+        h.SeatGuest(2);
+        CHECK_EQUAL(2, h.GetGuestsSeatedToday());
+    }
+
+    TEST(PizzeriaManager_Budget)
+    {
+        PizzeriaManager m(40, "Bob");
+        CHECK_CLOSE(0, m.GetMonthlyBudget(), 0.001);
+        m.SetMonthlyBudget(5000);
+        CHECK_CLOSE(5000, m.GetMonthlyBudget(), 0.001);
+    }
+
+    TEST(PizzeriaWaiter_OrdersDelivered)
+    {
+        PizzeriaWaiter w(20, "Waiter");
+        CHECK_EQUAL(0, w.GetOrdersDelivered());
+    }
+
+    TEST(DeliveryAddress_CityAndComment)
+    {
+        DeliveryAddress addr("Lenina", "10", "5", 2, "+7", "Moscow", "ring the bell");
+        CHECK_EQUAL("Moscow", addr.GetCity());
+        CHECK_EQUAL("ring the bell", addr.GetComment());
+        addr.SetComment("leave at door");
+        CHECK_EQUAL("leave at door", addr.GetComment());
+    }
+
+    TEST(DeliveryRoute_EstimatedMinutes)
+    {
+        DeliveryRoute route;
+        CHECK_EQUAL(0, route.GetEstimatedMinutes());
+        route.AddStop(std::make_shared<DeliveryAddress>("Lenina", "10", "5", 2, "+7"));
+        CHECK_EQUAL(5, route.GetEstimatedMinutes());
+    }
+
+    TEST(Ingredient_Unit)
+    {
+        Ingredient flour("Flour", 2, 100, false, 30, "kg");
+        CHECK_EQUAL("kg", flour.GetUnit());
+        Ingredient salt("Salt", 1, 0, false, 365);
+        CHECK_EQUAL("g", salt.GetUnit());
+    }
+
+    TEST(MenuItem_Availability)
+    {
+        MenuItem cola("Cola", "drink", 1, 330, 140, false);
+        CHECK(!cola.IsAvailable());
+        cola.SetAvailable(true);
+        CHECK(cola.IsAvailable());
+    }
+
+    TEST(ComboSet_Description)
+    {
+        ComboSet combo("Family Set", 10, "for the whole family");
+        CHECK_EQUAL("for the whole family", combo.GetDescription());
+        combo.AddItem(std::make_shared<MenuItem>("Pizza", "main", 10, 500, 1000), 1);
+        CHECK_EQUAL(1, combo.GetItemCount());
+    }
+
+    TEST(Order_IdAndTotal)
+    {
+        Order o(SinglePizzaOrder());
+        CHECK(o.GetOrderId() > 0);
+        CHECK(o.GetTotalPrice() > 0);
+    }
+
+    TEST(Payment_Method)
+    {
+        CashPayment p(500, 1000);
+        CHECK_EQUAL("cash", p.GetPaymentMethod());
+        p.SetPaymentMethod("cash_advance");
+        CHECK_EQUAL("cash_advance", p.GetPaymentMethod());
+    }
+
+    TEST(CardPayment_Brand)
+    {
+        CardPayment c(100, "4321", "Visa");
+        CHECK_EQUAL("Visa", c.GetCardBrand());
+    }
+
+    TEST(MobilePayment_Provider)
+    {
+        MobilePayment m(100, "+7-900", "tok-1", "SberPay");
+        CHECK_EQUAL("SberPay", m.GetProvider());
+    }
+
+    TEST(Receipt_PaymentMethod)
+    {
+        Receipt r(1);
+        CHECK_EQUAL("cash", r.GetPaymentMethod());
+        r.SetPaymentMethod("card");
+        CHECK_EQUAL("card", r.GetPaymentMethod());
+    }
+
+    TEST(LoyaltyProgram_TotalSpent)
+    {
+        LoyaltyProgram lp;
+        lp.AddPoints(500);
+        CHECK_CLOSE(500, lp.GetTotalSpent(), 0.001);
+    }
+
+    TEST(Oven_MaxLoadAndBakeCount)
+    {
+        Oven oven(60);
+        CHECK_EQUAL(60, oven.GetMaxLoad());
+        CHECK_EQUAL(0, oven.GetBakeCount());
+    }
+
+    TEST(Warehouse_Capacity)
+    {
+        Warehouse w(500);
+        CHECK_EQUAL(500, w.GetCapacity());
+    }
+
+    TEST(Supplier_MinimumOrder)
+    {
+        Supplier s("Farm", 2, 100);
+        CHECK_CLOSE(100, s.GetMinimumOrder(), 0.001);
+        s.SetMinimumOrder(200);
+        CHECK_CLOSE(200, s.GetMinimumOrder(), 0.001);
+    }
+
+    TEST(Recipe_Vegetarian)
+    {
+        Recipe r("Pasta", 2, 600, true);
+        CHECK(r.IsVegetarian());
+        r.SetVegetarian(false);
+        CHECK(!r.IsVegetarian());
+    }
+
+    TEST(PizzeriaClient_OrdersPlaced)
+    {
+        auto dept = std::make_shared<PizzaDepartment>("Test St");
+        PizzeriaClient client(25, "Vasya", dept);
+        CHECK_EQUAL(0, client.GetOrdersPlaced());
+    }
+
+    TEST(Refrigerator_RetrieveErase)
+    {
+        auto cheese = std::make_shared<Ingredient>("Cheese", 5, 100, true, 10);
+        Refrigerator fridge;
+        fridge.Store(cheese, 1, 100);
+        CHECK(fridge.Retrieve(cheese, 1));
+        CHECK_EQUAL(0, fridge.GetQuantity(cheese));
+    }
+
+    TEST(Refrigerator_DiscardKeepsFresh)
+    {
+        auto cheese = std::make_shared<Ingredient>("Cheese", 5, 100, true, 10);
+        auto milk = std::make_shared<Ingredient>("Milk", 3, 50, true, 1);
+        Refrigerator fridge;
+        fridge.Store(cheese, 2, 50);
+        fridge.Store(milk, 1, 5);
+        CHECK_EQUAL(1, fridge.DiscardExpired(10));
+        CHECK_EQUAL(2, fridge.GetQuantity(cheese));
+    }
+
+    TEST(MenuCatalog_CategoryFilter)
+    {
+        MenuCatalog catalog("Main");
+        MenuCatalog empty("Empty");
+        CHECK(empty.GetAllByCategory("pizza").empty());
+        catalog.AddItem(std::make_shared<MenuItem>("Margherita", "pizza", 10, 500, 1000));
+        CHECK(catalog.GetAllByCategory("drinks").empty());
+        CHECK_EQUAL(1, (int)catalog.GetAllByCategory("pizza").size());
+    }
+}

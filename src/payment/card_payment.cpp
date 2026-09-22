@@ -1,7 +1,7 @@
 #include "payment/card_payment.hpp"
 
-CardPayment::CardPayment(double amount, std::string card_last_four)
-    : Payment(amount), _card_last_four(card_last_four), _authorized(false), _captured(false)
+CardPayment::CardPayment(double amount, std::string card_last_four, std::string card_brand)
+    : Payment(amount, "card"), _card_last_four(card_last_four), _authorized(false), _captured(false), _card_brand(card_brand)
 {
 }
 
@@ -34,3 +34,4 @@ bool CardPayment::Refund()
 }
 
 std::string CardPayment::GetCardLastFour() const { return _card_last_four; }
+std::string CardPayment::GetCardBrand() const { return _card_brand; }

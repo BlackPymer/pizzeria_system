@@ -1,7 +1,7 @@
 #include "staff/pizzeria_manager.hpp"
 
 PizzeriaManager::PizzeriaManager(int age, std::string name)
-    : PizzeriaWorker(age, name), Human(age, name), _store_open(false), _complaints_resolved(0)
+    : PizzeriaWorker(age, name), Human(age, name), _store_open(false), _complaints_resolved(0), _monthly_budget(0)
 {
 }
 
@@ -37,3 +37,5 @@ int PizzeriaManager::GetScheduledWorkers(std::string day) const
 }
 
 int PizzeriaManager::GetComplaintsResolved() const { return _complaints_resolved; }
+double PizzeriaManager::GetMonthlyBudget() const { return _monthly_budget; }
+void PizzeriaManager::SetMonthlyBudget(double budget) { _monthly_budget = budget; }

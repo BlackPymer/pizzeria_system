@@ -2,7 +2,7 @@
 #include "common/pizzeria_exceptions.hpp"
 
 Cashier::Cashier(int age, std::string name)
-    : PizzeriaWorker(age, name), Human(age, name), _cash_drawer(0), _shift_open(false)
+    : PizzeriaWorker(age, name), Human(age, name), _cash_drawer(0), _shift_open(false), _transactions_processed(0)
 {
 }
 
@@ -23,8 +23,10 @@ double Cashier::AcceptPayment(std::shared_ptr<Payment> payment, double price)
     if (payment == nullptr || !payment->Process())
         throw PaymentDeclinedException();
     _cash_drawer += price;
+    _transactions_processed++;
     return payment->GetChange();
 }
 
 bool Cashier::IsShiftOpen() const { return _shift_open; }
 double Cashier::GetCashDrawer() const { return _cash_drawer; }
+int Cashier::GetTransactionsProcessed() const { return _transactions_processed; }

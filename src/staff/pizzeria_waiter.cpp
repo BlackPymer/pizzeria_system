@@ -2,7 +2,7 @@
 #include "pizzeria/pizzeria_department.hpp"
 #include <mutex>
 PizzeriaWaiter::PizzeriaWaiter(int age, std::string name)
-    : Human(age, name), PizzeriaWorker(age, name)
+    : Human(age, name), PizzeriaWorker(age, name), _orders_delivered(0)
 {
 }
 
@@ -27,6 +27,11 @@ int PizzeriaWaiter::GetActiveOrders()
     return orders.size();
 }
 
+int PizzeriaWaiter::GetOrdersDelivered() const
+{
+    return _orders_delivered;
+}
+
 void PizzeriaWaiter::_onOrderCooked(Order order)
 {
     std::function<void()> onOrderReady;
@@ -38,6 +43,7 @@ void PizzeriaWaiter::_onOrderCooked(Order order)
         onOrderReady = it->second;
         orders.erase(it);
     }
+    _orders_delivered++;
     _department->DeliverFinished(*this);
     onOrderReady();
     _department->OrderFinished();

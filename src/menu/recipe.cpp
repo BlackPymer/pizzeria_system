@@ -1,7 +1,7 @@
 #include "menu/recipe.hpp"
 
-Recipe::Recipe(std::string name, int portions, int prep_time_seconds)
-    : _name(name), _portions(portions), _prep_time_seconds(prep_time_seconds)
+Recipe::Recipe(std::string name, int portions, int prep_time_seconds, bool is_vegetarian)
+    : _name(name), _portions(portions), _prep_time_seconds(prep_time_seconds), _is_vegetarian(is_vegetarian)
 {
 }
 
@@ -12,6 +12,8 @@ void Recipe::AddIngredient(std::shared_ptr<Ingredient> ingredient, int amount)
 
 int Recipe::GetPortions() const { return _portions; }
 int Recipe::GetPrepTimeSeconds() const { return _prep_time_seconds; }
+bool Recipe::IsVegetarian() const { return _is_vegetarian; }
+void Recipe::SetVegetarian(bool vegetarian) { _is_vegetarian = vegetarian; }
 
 double Recipe::GetCostPerPortion() const
 {

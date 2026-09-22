@@ -4,7 +4,7 @@
 #include <functional>
 #include <iostream>
 PizzeriaClient::PizzeriaClient(int age, std::string name, std::shared_ptr<PizzaDepartment> department)
-    : Human(age, name), _department(department)
+    : Human(age, name), _department(department), _orders_placed(0)
 {
     _department = department;
     _order = std::vector<Pizza>();
@@ -19,7 +19,13 @@ void PizzeriaClient::OrderPizza(std::vector<Pizza> menu)
         if (count > 0)
             order.push_back(std::make_pair(pizza, count));
     }
+    _orders_placed++;
     _department->TakeOrder(order, std::bind(&PizzeriaClient::_OnPizzaDelivered, this));
+}
+
+int PizzeriaClient::GetOrdersPlaced() const
+{
+    return _orders_placed;
 }
 void PizzeriaClient::_OnPizzaDelivered()
 {

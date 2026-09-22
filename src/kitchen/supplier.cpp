@@ -1,7 +1,7 @@
 #include "kitchen/supplier.hpp"
 
-Supplier::Supplier(std::string name, int delivery_days)
-    : _name(name), _delivery_days(delivery_days), _delivery_fee(100)
+Supplier::Supplier(std::string name, int delivery_days, double minimum_order)
+    : _name(name), _delivery_days(delivery_days), _delivery_fee(100), _minimum_order(minimum_order)
 {
 }
 
@@ -27,3 +27,5 @@ double Supplier::PlaceOrder(int units) const
 
 int Supplier::GetDeliveryDays() const { return _delivery_days; }
 std::string Supplier::GetName() const { return _name; }
+double Supplier::GetMinimumOrder() const { return _minimum_order; }
+void Supplier::SetMinimumOrder(double amount) { _minimum_order = amount; }

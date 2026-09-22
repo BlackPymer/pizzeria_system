@@ -12,9 +12,11 @@ public:
     double CalculateDistance() const;
     void Optimize();
     bool IsOptimized() const;
+    int GetEstimatedMinutes() const;
 
 private:
     std::vector<std::shared_ptr<DeliveryAddress>> _stops;
     double _distance_km;
+    int _estimated_minutes;
     bool _optimized;
 };

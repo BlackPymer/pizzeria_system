@@ -4,11 +4,14 @@
 class DeliveryAddress
 {
 public:
-    DeliveryAddress(std::string street, std::string building, std::string apartment, int floor, std::string phone);
+    DeliveryAddress(std::string street, std::string building, std::string apartment, int floor, std::string phone, std::string city = "", std::string comment = "");
     std::string GetStreet() const;
     std::string GetFullAddress() const;
     std::string GetPhone() const;
     int GetFloor() const;
+    std::string GetCity() const;
+    std::string GetComment() const;
+    void SetComment(std::string comment);
 
 private:
     std::string _street;
@@ -16,4 +19,6 @@ private:
     std::string _apartment;
     int _floor;
     std::string _phone;
+    std::string _city;
+    std::string _comment;
 };

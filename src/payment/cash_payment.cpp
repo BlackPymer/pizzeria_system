@@ -2,7 +2,7 @@
 #include "common/pizzeria_exceptions.hpp"
 
 CashPayment::CashPayment(double amount, double paid_amount)
-    : Payment(amount), _paid_amount(paid_amount), _change(0)
+    : Payment(amount, "cash"), _paid_amount(paid_amount), _change(0)
 {
 }
 

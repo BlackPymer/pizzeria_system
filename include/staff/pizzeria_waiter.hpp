@@ -15,9 +15,11 @@ public:
     using PizzeriaWorker::SetDepartment;
     void GetOrder(std::vector<std::pair<Pizza, int>> order, std::function<void()> onOrderReady);
     int GetActiveOrders();
+    int GetOrdersDelivered() const;
 
 private:
     std::mutex mtx;
+    int _orders_delivered;
     void _onOrderCooked(Order order);
     std::map<Order, std::function<void()>> orders;
 };

@@ -1,11 +1,15 @@
 #include "payment/loyalty_program.hpp"
 
-LoyaltyProgram::LoyaltyProgram() : _points(0), _visits(0)
+LoyaltyProgram::LoyaltyProgram() : _points(0), _visits(0), _total_spent(0)
 {
 }
 
 void LoyaltyProgram::RegisterVisit() { _visits++; }
-void LoyaltyProgram::AddPoints(double amount_spent) { _points += (int)amount_spent; }
+void LoyaltyProgram::AddPoints(double amount_spent)
+{
+    _points += (int)amount_spent;
+    _total_spent += amount_spent;
+}
 
 bool LoyaltyProgram::SpendPoints(int points_to_spend)
 {
@@ -17,6 +21,7 @@ bool LoyaltyProgram::SpendPoints(int points_to_spend)
 
 int LoyaltyProgram::GetPoints() const { return _points; }
 int LoyaltyProgram::GetVisits() const { return _visits; }
+double LoyaltyProgram::GetTotalSpent() const { return _total_spent; }
 
 std::string LoyaltyProgram::GetTier() const
 {

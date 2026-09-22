@@ -11,10 +11,12 @@ public:
     double GetTotalRevenue() const;
     double GetTotalExpenses() const;
     double GetNetProfit() const;
+    int GetTransactionsCount() const;
     double CalculateSalary(double hourly_rate, int hours) const;
 
 private:
     double _total_revenue;
     double _total_expenses;
     double _total_payroll;
+    int _transactions_count;
 };

@@ -1,7 +1,7 @@
 #include "menu/combo_set.hpp"
 
-ComboSet::ComboSet(std::string name, double discount_percent)
-    : MenuItem(name, "combo", 0, 0, 0), _discount_percent(discount_percent)
+ComboSet::ComboSet(std::string name, double discount_percent, std::string description)
+    : MenuItem(name, "combo", 0, 0, 0), _discount_percent(discount_percent), _description(description)
 {
 }
 
@@ -21,6 +21,11 @@ int ComboSet::GetItemCount() const
     for (const auto &p : _items)
         total += p.second;
     return total;
+}
+
+std::string ComboSet::GetDescription() const
+{
+    return _description;
 }
 
 double ComboSet::GetTotalPrice() const

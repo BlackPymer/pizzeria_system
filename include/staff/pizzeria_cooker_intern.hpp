@@ -9,4 +9,9 @@ public:
     PizzeriaCookerIntern(int age, std::string name);
     PizzeriaCookerIntern(int age, std::string name, double time_factor);
     void CookOrder(Order order, std::function<void(Order)> onOrderCooked) override;
+    int GetTrainingScore() const;
+    void SetTrainingScore(int score);
+
+private:
+    int _training_score;
 };

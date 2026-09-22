@@ -15,10 +15,13 @@ public:
     void SetSchedule(std::string day, int workers);
     int GetScheduledWorkers(std::string day) const;
     int GetComplaintsResolved() const;
+    double GetMonthlyBudget() const;
+    void SetMonthlyBudget(double budget);
 
 private:
     bool _store_open;
     int _complaints_resolved;
+    double _monthly_budget;
     std::map<std::string, double> _active_discounts;
     std::map<std::string, int> _schedule;
 };

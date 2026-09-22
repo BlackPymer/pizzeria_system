@@ -1,7 +1,7 @@
 #include "kitchen/warehouse.hpp"
 #include "common/pizzeria_exceptions.hpp"
 
-Warehouse::Warehouse() : _reorder_level(0), _restock_pending(false)
+Warehouse::Warehouse(int capacity) : _reorder_level(0), _capacity(capacity), _restock_pending(false)
 {
 }
 
@@ -36,4 +36,5 @@ int Warehouse::GetStock(std::shared_ptr<Ingredient> ingredient) const
 
 void Warehouse::SetReorderLevel(int level) { _reorder_level = level; }
 int Warehouse::GetReorderLevel() const { return _reorder_level; }
+int Warehouse::GetCapacity() const { return _capacity; }
 bool Warehouse::IsRestockPending() const { return _restock_pending; }

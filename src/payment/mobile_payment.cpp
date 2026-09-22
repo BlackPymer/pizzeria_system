@@ -1,8 +1,8 @@
 #include "payment/mobile_payment.hpp"
 #include "common/pizzeria_exceptions.hpp"
 
-MobilePayment::MobilePayment(double amount, std::string phone, std::string token)
-    : Payment(amount), _phone(phone), _token(token)
+MobilePayment::MobilePayment(double amount, std::string phone, std::string token, std::string provider)
+    : Payment(amount, "mobile"), _phone(phone), _token(token), _provider(provider)
 {
 }
 
@@ -20,3 +20,4 @@ bool MobilePayment::Process()
 }
 
 std::string MobilePayment::GetPhone() const { return _phone; }
+std::string MobilePayment::GetProvider() const { return _provider; }

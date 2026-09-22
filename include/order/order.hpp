@@ -18,9 +18,14 @@ public:
     void SetStatus(OrderStatus status);
     std::map<Pizza, int> GetOrderComponents();
     int GetPizzaCount();
+    int GetOrderId() const;
+    double GetTotalPrice() const;
     bool operator<(const Order &other) const;
 
 private:
+    static int _next_id;
     std::map<Pizza, int> _pizzas;
     OrderStatus _status;
+    int _order_id;
+    double _total_price;
 };

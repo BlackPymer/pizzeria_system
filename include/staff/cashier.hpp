@@ -12,8 +12,10 @@ public:
     double AcceptPayment(std::shared_ptr<Payment> payment, double price);
     bool IsShiftOpen() const;
     double GetCashDrawer() const;
+    int GetTransactionsProcessed() const;
 
 private:
     double _cash_drawer;
     bool _shift_open;
+    int _transactions_processed;
 };

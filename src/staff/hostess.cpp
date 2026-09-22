@@ -2,7 +2,7 @@
 
 Hostess::Hostess(int age, std::string name, int tables_total)
     : PizzeriaWorker(age, name), Human(age, name), _tables_total(tables_total),
-      _tables_occupied(0), _reserved_tables(0)
+      _tables_occupied(0), _reserved_tables(0), _guests_seated_today(0)
 {
 }
 
@@ -11,6 +11,7 @@ bool Hostess::SeatGuest(int party_size)
     if (_tables_occupied + party_size > _tables_total)
         return false;
     _tables_occupied += party_size;
+    _guests_seated_today += party_size;
     return true;
 }
 
@@ -18,6 +19,7 @@ void Hostess::ManageReservation(int party_size)
 {
     _reserved_tables += party_size;
     _tables_occupied += party_size;
+    _guests_seated_today += party_size;
 }
 
 void Hostess::AddToWaitingList(int party_size)
@@ -35,3 +37,4 @@ int Hostess::EstimateWaitTime() const
 
 int Hostess::GetTablesOccupied() const { return _tables_occupied; }
 int Hostess::GetWaitingParties() const { return _waiting_list.size(); }
+int Hostess::GetGuestsSeatedToday() const { return _guests_seated_today; }

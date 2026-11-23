@@ -1,0 +1,114 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-test:
+    name: Сборка, тесты и покрытие
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Получить исходный код
+        uses: actions/checkout@v4
+
+      - name: Установить инструменты
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake g++ libunittest++-dev gcovr
+
+      - name: Настроить сборку с покрытием
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug \
+            -DCMAKE_CXX_FLAGS="--coverage" \
+            -DCMAKE_EXE_LINKER_FLAGS="--coverage"
+
+      - name: Собрать
+        run: cmake --build build --parallel
+
+      - name: Запустить тесты
+        run: ./build/run_tests
+
+      - name: Проверить покрытие
+        run: |
+          gcovr --root "$GITHUB_WORKSPACE" \
+            --filter "$GITHUB_WORKSPACE/src/" \
+            --filter "$GITHUB_WORKSPACE/include/" \
+            --exclude '.*/src/main.cpp' \
+            --fail-under-line 90 \
+            --print-summary \
+            --xml build/coverage.xml
+
+      - name: Сохранить отчёт покрытия
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: build/coverage.xml
+
+  static-analysis:
+    name: Статический анализ
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Получить исходный код
+        uses: actions/checkout@v4
+
+      - name: Установить инструменты
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake g++ clang-tidy libunittest++-dev
+
+      - name: Подготовить compile_commands.json
+        run: cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+
+      - name: Запустить clang-analyzer
+        run: |
+          clang-tidy -p build --checks='-*,clang-analyzer-*' \
+            --warnings-as-errors='*' $(find src -name '*.cpp')
+
+  package:
+    name: Сборка артефакта
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Получить исходный код
+        uses: actions/checkout@v4
+
+      - name: Установить инструменты
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake g++ libunittest++-dev
+
+      - name: Собрать релизный бинарник
+        run: |
+          cmake -S . -B build-release -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-release --target pizzeria --parallel
+          mkdir -p dist/pizzeria
+          cp build-release/pizzeria dist/pizzeria/pizzeria
+          cp README.md dist/pizzeria/README.md
+          tar -czf dist/pizzeria-linux-x86_64.tar.gz -C dist/pizzeria .
+
+      - name: Сохранить артефакт
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-archive
+          path: dist/*.tar.gz
+
+      - name: Опубликовать Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*.tar.gz
+          generate_release_notes: true
